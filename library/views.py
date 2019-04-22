@@ -64,6 +64,7 @@ class AuthorListView(generic.ListView):
     queryset = Author.objects.all()
 
     template_name = 'library/author_list.html'
+    paginate_by = 5
 
 
 class GenreListView(generic.ListView):
@@ -84,7 +85,7 @@ class BooksRentedByUserListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         ''' select * from library_BookInstance inner join auth_user on library_BookInstance.rent_id=auth_user.id
         where library_BookInstance.status='o' order by due_back '''
-        return BookInstance.objects.filter(rent=self.request.user.id).filter(status__exact='o').order_by('due_back')
+        return BookInstance.objects.filter(borrowed=self.request.user.id).filter(status__exact='o').order_by('due_back')
 
 
 class BooksRentedByUsersListView(PermissionRequiredMixin, generic.ListView):
