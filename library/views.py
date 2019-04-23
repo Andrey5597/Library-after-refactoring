@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.db.models import Q
+from django.db.models import Value
+from django.db.models.functions import Concat
 
 
 def home(request):
@@ -39,13 +41,13 @@ def book_list(request):
     """select * from library_Book;"""
     queryset = Book.objects.all()
     if query:
-        queryset = queryset.filter(
+        queryset = queryset.annotate(full_name=Concat('author__name', Value(' '), 'author__surname')).filter(
             Q(book_title__icontains=query) |
             Q(author__name__icontains=query) |
             Q(author__surname__icontains=query) |
-            Q(genre__genre__icontains=query)
+            Q(genre__genre__icontains=query) |
+            Q(full_name__icontains=query)
         )
-
     context = {'book_list': queryset}
     return render(request, 'library/book_list.html', context=context)
 
