@@ -9,7 +9,7 @@
       {% for book in rent_list %}
       <li class="{% if book.is_overdue %}text-danger{% endif %}">
           {{book.book.book_title}}
-          <p><strong> Rented by : </strong> {{book.rent.username}} </p>
+          <p><strong> Rented by : </strong> {{book.borrowed.username}} </p>
           <p><strong>Must return: </strong> {{ book.due_back }} </p>
       </li>
       {% endfor %}

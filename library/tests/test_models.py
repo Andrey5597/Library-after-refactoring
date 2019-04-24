@@ -168,6 +168,15 @@ class BookinstanceModelTest(TestCase):
                                     shelf=Shelf.objects.create(shelf_name='C3', id=2), id=3
                                     ), due_back='2019-04-26')
 
+    def setUp(self):
+        BookInstance.objects.create(status='a', book=Book.objects.create(book_title='Harry Potter',
+                                    isbn=1234567890123, published='2003-06-21',
+                                    number_of_pages=766, book_summary='Cool',
+                                    author=Author.objects.create(name='Will', surname='Smith'),
+                                    genre=Genre.objects.create(genre='Novel'),
+                                    shelf=Shelf.objects.create(shelf_name='C3', id=6), id=4
+                                    ), due_back='2019-04-18', id=5)
+
     def test_status_max_length(self):
         status = BookInstance.objects.get(id=1)
         max_length = status._meta.get_field('status').max_length
@@ -185,3 +194,7 @@ class BookinstanceModelTest(TestCase):
     def test_book_is_over_due(self):
         book = BookInstance.objects.get(id=1)
         self.assertFalse(book.is_overdue)
+
+    def test_book_is_not_over_due(self):
+        book = BookInstance.objects.get(id=5)
+        self.assertTrue(book.is_overdue)
