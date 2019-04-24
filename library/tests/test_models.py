@@ -181,3 +181,7 @@ class BookinstanceModelTest(TestCase):
     def test_get_absolute_url(self):
         bookinstance = BookInstance.objects.get(id=1)
         self.assertEqual(bookinstance.get_absolute_url(), '/library/copy/1/update/')
+
+    def test_book_is_over_due(self):
+        book = BookInstance.objects.get(id=1)
+        self.assertFalse(book.is_overdue)
