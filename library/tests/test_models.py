@@ -31,7 +31,8 @@ class BookModelTest(TestCase):
                             isbn=1234567890123, published='2003-06-21',
                             number_of_pages=766, book_summary='Cool',
                             author=Author.objects.create(name='Will', surname='Smith'),
-                            genre=Genre.objects.create(genre='Novel')
+                            genre=Genre.objects.create(genre='Novel'),
+                            shelf=Shelf.objects.create(shelf_name='C3', id=2)
                             )
 
     def test_book_title_max_length(self):
@@ -78,6 +79,15 @@ class BookModelTest(TestCase):
         book_summary = Book.objects.get(id=1)
         max_length = book_summary._meta.get_field('book_summary').max_length
         self.assertEqual(max_length, 1500)
+
+    def test_object_name_is_book_title(self):
+        book = Book.objects.get(id=1)
+        expected_object_name = 'Harry Potter'
+        self.assertEqual(expected_object_name, str(book))
+
+    def test_get_absolute_url(self):
+        book = Book.objects.get(id=1)
+        self.assertEqual(book.get_absolute_url(), '/library/book/1')
 
 
 class AuthorModelTest(TestCase):
@@ -126,7 +136,25 @@ class AuthorModelTest(TestCase):
         self.assertEqual(expected_object_name, str(author))
 
 
+class GenreModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        Genre.objects.create(genre='Novel', id=2)
 
+    def test_genre_label(self):
+        genre = Genre.objects.get(id=2)
+        field_label = genre._meta.get_field('genre').verbose_name
+        self.assertEqual(field_label, 'Genre')
+
+    def test_genre_max_length(self):
+        genre = Genre.objects.get(id=2)
+        max_length = genre._meta.get_field('genre').max_length
+        self.assertEqual(max_length, 20)
+
+    def test_object_name_is_genre(self):
+        genre = Genre.objects.get(id=2)
+        expected_object_name = 'Novel'
+        self.assertEqual(expected_object_name, str(genre))
 
 
 
