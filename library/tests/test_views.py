@@ -59,7 +59,6 @@ class AuthorListViewTest(TestCase):
                 surname=f'Surname {author_id}',
             )
 
-
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/library/authors/')
         self.assertEqual(response.status_code, 200)
