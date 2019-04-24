@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from ..models import Shelf, Book, Author, Genre
+from ..models import Shelf, Book, Author, Genre, BookInstance
 
 
 class ShelfModelTest(TestCase):
@@ -157,4 +157,27 @@ class GenreModelTest(TestCase):
         self.assertEqual(expected_object_name, str(genre))
 
 
+class BookinstanceModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        BookInstance.objects.create(status='a', book=Book.objects.create(book_title='Harry Potter',
+                                    isbn=1234567890123, published='2003-06-21',
+                                    number_of_pages=766, book_summary='Cool',
+                                    author=Author.objects.create(name='Will', surname='Smith'),
+                                    genre=Genre.objects.create(genre='Novel'),
+                                    shelf=Shelf.objects.create(shelf_name='C3', id=2), id=3
+                                    ), due_back='2019-04-26')
 
+    def test_status_max_length(self):
+        status = BookInstance.objects.get(id=1)
+        max_length = status._meta.get_field('status').max_length
+        self.assertEqual(max_length, 1)
+
+    def test_object_name_is_book_title(self):
+        book = BookInstance.objects.get(id=1)
+        expected_object_name = 'Harry Potter'
+        self.assertEqual(expected_object_name, str(book))
+
+    def test_get_absolute_url(self):
+        bookinstance = BookInstance.objects.get(id=1)
+        self.assertEqual(bookinstance.get_absolute_url(), '/library/copy/1/update/')
