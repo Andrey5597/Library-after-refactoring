@@ -5,16 +5,6 @@ from ..models import Author, Book, Shelf, Genre, BookInstance
 
 
 class BookListViewTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        Book.objects.create(book_title='Harry Potter',
-                            isbn=1234567890123, published='2003-06-21',
-                            number_of_pages=766, book_summary='Cool',
-                            author=Author.objects.create(name='Will', surname='Smith'),
-                            genre=Genre.objects.create(genre='Novel'),
-                            shelf=Shelf.objects.create(shelf_name='C3')
-                            )
-
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/library/books/')
         self.assertEqual(response.status_code, 200)
@@ -30,10 +20,6 @@ class BookListViewTest(TestCase):
 
 
 class GenreListViewTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        Genre.objects.create(genre='Novel')
-
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/library/genres/')
         self.assertEqual(response.status_code, 200)
