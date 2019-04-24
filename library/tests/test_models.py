@@ -34,7 +34,7 @@ class BookModelTest(TestCase):
                             genre=Genre.objects.create(genre='Novel')
                             )
 
-    def test_shelf_name_max_length(self):
+    def test_book_title_max_length(self):
         book_title = Book.objects.get(id=1)
         max_length = book_title._meta.get_field('book_title').max_length
         self.assertEqual(max_length, 50)
@@ -43,6 +43,41 @@ class BookModelTest(TestCase):
         book_title = Book.objects.get(id=1)
         field_label = book_title._meta.get_field('book_title').verbose_name
         self.assertEqual(field_label, 'Title')
+
+    def test_isbn_max_length(self):
+        isbn = Book.objects.get(id=1)
+        max_length = isbn._meta.get_field('isbn').max_length
+        self.assertEqual(max_length, 13)
+
+    def test_isbn_label(self):
+        isbn = Book.objects.get(id=1)
+        field_label = isbn._meta.get_field('isbn').verbose_name
+        self.assertEqual(field_label, 'ISBN')
+
+    def test_author_label(self):
+        author = Book.objects.get(id=1)
+        field_label = author._meta.get_field('author').verbose_name
+        self.assertEqual(field_label, 'Author')
+
+    def test_published_label(self):
+        published = Book.objects.get(id=1)
+        field_label = published._meta.get_field('published').verbose_name
+        self.assertEqual(field_label, 'Date of publish')
+
+    def test_number_of_pages_label(self):
+        number_of_pages = Book.objects.get(id=1)
+        field_label = number_of_pages._meta.get_field('number_of_pages').verbose_name
+        self.assertEqual(field_label, 'Number of pages')
+
+    def test_book_summary_label(self):
+        book_summary = Book.objects.get(id=1)
+        field_label = book_summary._meta.get_field('book_summary').verbose_name
+        self.assertEqual(field_label, 'Book summary')
+
+    def test_book_summary_max_length(self):
+        book_summary = Book.objects.get(id=1)
+        max_length = book_summary._meta.get_field('book_summary').max_length
+        self.assertEqual(max_length, 1500)
 
 
 class AuthorModelTest(TestCase):
